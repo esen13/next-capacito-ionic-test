@@ -11,6 +11,8 @@
 # production
 /build
 /out
+.next
+.workspace
 
 # misc
 .DS_Store
