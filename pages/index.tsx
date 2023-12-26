@@ -8,7 +8,6 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
     const isPlatform = Capacitor.isNativePlatform();
-    console.log('isPlatform', isPlatform)
   return (
     <>
       <Head>
