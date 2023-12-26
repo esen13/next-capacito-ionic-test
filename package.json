@@ -1,37 +1,38 @@
 {
-  "name": "next-mobile",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev -- -p 3020",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "static": "next build && next export"
-  },
-  "dependencies": {
-    "@capacitor/android": "^5.6.0",
-    "@capacitor/app": "^5.0.6",
-    "@capacitor/core": "^5.6.0",
-    "@capacitor/haptics": "^5.0.6",
-    "@capacitor/ios": "^5.6.0",
-    "@capacitor/keyboard": "^5.0.7",
-    "@capacitor/share": "^5.0.6",
-    "@capacitor/status-bar": "^5.0.6",
-    "@ionic/react": "^7.6.2",
-    "ionicons": "^7.2.2",
-    "next": "14.0.4",
-    "next-transpile-modules": "^10.0.1",
-    "react": "^18",
-    "react-dom": "^18"
-  },
-  "devDependencies": {
-    "@capacitor/cli": "^5.6.0",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.4",
-    "typescript": "^5"
-  }
+	"name": "next-mobile",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev -- -p 3020",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"static": "next build && next export",
+		"sync": "npx cap sync"
+	},
+	"dependencies": {
+		"@capacitor/android": "^5.6.0",
+		"@capacitor/app": "^5.0.6",
+		"@capacitor/core": "^5.6.0",
+		"@capacitor/haptics": "^5.0.6",
+		"@capacitor/ios": "^5.6.0",
+		"@capacitor/keyboard": "^5.0.7",
+		"@capacitor/share": "^5.0.6",
+		"@capacitor/status-bar": "^5.0.6",
+		"@ionic/react": "^7.6.2",
+		"ionicons": "^7.2.2",
+		"next": "14.0.4",
+		"next-transpile-modules": "^10.0.1",
+		"react": "^18",
+		"react-dom": "^18"
+	},
+	"devDependencies": {
+		"@capacitor/cli": "^5.6.0",
+		"@types/node": "^20",
+		"@types/react": "^18",
+		"@types/react-dom": "^18",
+		"eslint": "^8",
+		"eslint-config-next": "14.0.4",
+		"typescript": "^5"
+	}
 }
