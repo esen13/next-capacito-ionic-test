@@ -19,6 +19,13 @@ const DEFAULT_ITEM = {
 	description: '',
 }
 
+interface ItemInter {
+	title: string
+	subTitle: string
+	img: string
+	description: string
+}
+
 function ModalComponent({ createProduct }: ModalInter) {
 	const modal = useRef<HTMLIonModalElement>(null)
 	const [item, setItem] = useState(DEFAULT_ITEM)
@@ -33,7 +40,8 @@ function ModalComponent({ createProduct }: ModalInter) {
 		// const isRequired: boolean = Object.keys(item).some(k => item[k].length > 1)
 		let isRequired: Boolean = false
 		Object.keys(item).forEach(k => {
-			if (item[k].length > 2) {
+			const key = k as keyof typeof item
+			if (item[key].length > 2) {
 				isRequired = true
 			} else {
 				isRequired = false
