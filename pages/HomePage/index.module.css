@@ -1,0 +1,11 @@
+.ionRow {
+	/* gap: 1rem; */
+}
+.ionCol {
+	padding: 0.5rem;
+	border-radius: 12px;
+	/* border: solid 1px #eee; */
+	color: #fff;
+	text-align: center;
+	margin-bottom: 1rem;
+}
