@@ -12,8 +12,8 @@ npm install
 
 2-nd step
 
- npm run sync
  npm run static
+ npm run sync
 
 3-rd step
 
