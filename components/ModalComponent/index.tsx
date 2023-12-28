@@ -17,6 +17,7 @@ const DEFAULT_ITEM = {
 	subTitle: '',
 	img: '',
 	description: '',
+	price: 0,
 }
 
 interface ItemInter {
@@ -24,9 +25,10 @@ interface ItemInter {
 	subTitle: string
 	img: string
 	description: string
+	price: number
 }
 
-function ModalComponent({ createProduct }: ModalInter) {
+function ModalComponent({ createProduct, setToastData }: ModalInter) {
 	const modal = useRef<HTMLIonModalElement>(null)
 	const [item, setItem] = useState(DEFAULT_ITEM)
 
@@ -41,7 +43,7 @@ function ModalComponent({ createProduct }: ModalInter) {
 		let isRequired: Boolean = false
 		Object.keys(item).forEach(k => {
 			const key = k as keyof typeof item
-			if (item[key].length > 2) {
+			if (item[key].toString().length > 2) {
 				isRequired = true
 			} else {
 				isRequired = false
@@ -50,6 +52,11 @@ function ModalComponent({ createProduct }: ModalInter) {
 		if (isRequired && item) {
 			createProduct(item)
 			onDismiss()
+			setToastData((prev: any) => ({
+				...prev,
+				message: 'Successfully added product!',
+				isOpen: true,
+			}))
 		} else {
 			alert('Fields is required')
 		}
@@ -109,6 +116,17 @@ function ModalComponent({ createProduct }: ModalInter) {
 							type='text'
 							// placeholder='Image Url'
 							onIonChange={event => handleInputChange('img', event)}
+						/>
+					</IonItem>
+					<IonItem>
+						<IonInput
+							value={item['price']}
+							label='Enter price'
+							labelPlacement='stacked'
+							type='number'
+							min={0}
+							// placeholder='Image Url'
+							onIonChange={event => handleInputChange('price', event)}
 						/>
 					</IonItem>
 				</IonContent>

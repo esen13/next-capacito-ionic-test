@@ -9,6 +9,7 @@ export const productList: Product[] = [
 		subTitle: 'Lorem ipsum dolor sit amet consectetur',
 		description:
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio ducimus consequatur perspiciatis consectetur. Quas sequi deserunt vel earum officiis dolores dolorem quo eveniet suscipit tenetur. Quae, dolorem excepturi! Exercitationem, vero!',
+		price: 1999,
 	},
 	{
 		id: uuidv4(),
@@ -17,6 +18,7 @@ export const productList: Product[] = [
 		subTitle: 'Lorem ipsum dolor sit amet consectetur',
 		description:
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio ducimus consequatur perspiciatis consectetur. Quas sequi deserunt vel earum officiis dolores dolorem quo eveniet suscipit tenetur. Quae, dolorem excepturi! Exercitationem, vero!',
+		price: 1899,
 	},
 	{
 		id: uuidv4(),
@@ -25,6 +27,7 @@ export const productList: Product[] = [
 		subTitle: 'Lorem ipsum dolor sit amet consectetur',
 		description:
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio ducimus consequatur perspiciatis consectetur. Quas sequi deserunt vel earum officiis dolores dolorem quo eveniet suscipit tenetur. Quae, dolorem excepturi! Exercitationem, vero!',
+		price: 1799,
 	},
 	{
 		id: uuidv4(),
@@ -33,5 +36,6 @@ export const productList: Product[] = [
 		subTitle: 'Lorem ipsum dolor sit amet consectetur',
 		description:
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio ducimus consequatur perspiciatis consectetur. Quas sequi deserunt vel earum officiis dolores dolorem quo eveniet suscipit tenetur. Quae, dolorem excepturi! Exercitationem, vero!',
+		price: 1599,
 	},
 ]

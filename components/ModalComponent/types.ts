@@ -6,4 +6,5 @@ export interface MyElementsProps {
 
 export interface ModalInter {
 	createProduct: (newProduct: Omit<Product, 'id'>) => void
+	setToastData: any
 }

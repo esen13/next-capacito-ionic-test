@@ -5,26 +5,54 @@ import {
 	IonCardHeader,
 	IonCardSubtitle,
 	IonCardTitle,
-	IonImg,
+	IonNavLink,
 	IonThumbnail,
 	IonTitle,
+	useIonActionSheet,
 } from '@ionic/react'
 
+import ProductPage from '@/pages/ProductPage'
 import styles from './styles/index.module.css'
 
 interface CardInter {
-	title: string
-	img: string
-	subTitle: string
-	description: string
+	dItem: any
+	handleDeleteProduct: (id: string) => void
+	setToastData: any
 }
 
 const CardComponent: React.FC<CardInter> = ({
-	title,
-	img,
-	subTitle,
-	description,
+	dItem,
+	handleDeleteProduct,
+	setToastData,
 }) => {
+	const { title, subTitle, img, description, price, id } = dItem
+	const [present] = useIonActionSheet()
+
+	function canDismiss() {
+		return new Promise<boolean>((resolve, reject) => {
+			present({
+				header: 'Are you sure?',
+				buttons: [
+					{
+						text: 'Yes',
+						role: 'confirm',
+					},
+					{
+						text: 'No',
+						role: 'cancel',
+					},
+				],
+				onWillDismiss: (ev: { detail: { role: string } }) => {
+					if (ev.detail.role === 'confirm') {
+						resolve(true)
+					} else {
+						reject()
+					}
+				},
+			})
+		})
+	}
+
 	return (
 		<IonCard className={`${styles.cardContainer} ion-padding-top`}>
 			<IonCardHeader className='ion-margin-top'>
@@ -38,15 +66,50 @@ const CardComponent: React.FC<CardInter> = ({
 			<IonThumbnail className={styles.ionThumbnail} style={{ height: '200px' }}>
 				<img
 					alt='Silhouette of mountains'
-					src='https://ionicframework.com/docs/img/demos/thumbnail.svg'
+					src={`${
+						img
+							? img
+							: 'https://ionicframework.com/docs/img/demos/thumbnail.svg'
+					} `}
 				/>
 			</IonThumbnail>
 			<IonCardContent className='ion-padding'>{description}</IonCardContent>
 			<IonTitle color='danger' className='ion-margin-top'>
-				1999$
+				{price}$
 			</IonTitle>
+			<IonNavLink
+				routerDirection='forward'
+				component={() => (
+					<ProductPage
+						dItem={dItem}
+						handleDeleteProduct={handleDeleteProduct}
+						setToastData={setToastData}
+					/>
+				)}
+			>
+				<IonButton expand='full' className='ion-margin-top' color='secondary'>
+					View
+				</IonButton>
+			</IonNavLink>
 			<IonButton expand='full' className='ion-margin-top'>
 				Buy
+			</IonButton>
+			<IonButton
+				expand='full'
+				color='danger'
+				className='ion-margin-top'
+				onClick={async () => {
+					await canDismiss().then(() => {
+						handleDeleteProduct(id)
+						setToastData((prev: any) => ({
+							...prev,
+							isOpen: true,
+							message: 'Successfully deleted product!',
+						}))
+					})
+				}}
+			>
+				Delete
 			</IonButton>
 		</IonCard>
 	)
