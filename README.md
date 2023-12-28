@@ -12,7 +12,6 @@ npm install
 
 2-nd step
 
- npm run dev
  npm run sync
  npm run static
 
@@ -23,6 +22,7 @@ npm install
 	 get ip: run command: ipconfig getifaddr en0 or en1
 
 4-rd step
+   npm run dev
 
    npm run open:ios
 	 or
