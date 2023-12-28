@@ -10,16 +10,17 @@ npm install
 
 ## Getting Started
 
-2-nd step
-
- npm run static
- npm run sync
-
-3-rd step
+2-rd step
 
    open file [Config Capacitor](capacitor.config.ts)
 	 need change url for ip/wifi network
 	 get ip: run command: ipconfig getifaddr en0 or en1
+
+3-nd step
+
+ npm run static
+ npm run sync
+
 
 4-rd step
    npm run dev
