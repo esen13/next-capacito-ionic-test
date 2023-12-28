@@ -1,4 +1,6 @@
+import type { OverlayEventDetail } from '@ionic/core'
 import {
+	IonActionSheet,
 	IonButton,
 	IonCard,
 	IonCardContent,
@@ -8,10 +10,11 @@ import {
 	IonNavLink,
 	IonThumbnail,
 	IonTitle,
-	useIonActionSheet,
 } from '@ionic/react'
+import QRCode from 'react-qr-code'
 
 import ProductPage from '@/pages/ProductPage'
+import { useState } from 'react'
 import styles from './styles/index.module.css'
 
 interface CardInter {
@@ -26,30 +29,22 @@ const CardComponent: React.FC<CardInter> = ({
 	setToastData,
 }) => {
 	const { title, subTitle, img, description, price, id } = dItem
-	const [present] = useIonActionSheet()
+	const [isOpen, setIsOpen] = useState(false)
 
-	function canDismiss() {
+	const onResult = (result: OverlayEventDetail) => {
 		return new Promise<boolean>((resolve, reject) => {
-			present({
-				header: 'Are you sure?',
-				buttons: [
-					{
-						text: 'Yes',
-						role: 'confirm',
-					},
-					{
-						text: 'No',
-						role: 'cancel',
-					},
-				],
-				onWillDismiss: (ev: { detail: { role: string } }) => {
-					if (ev.detail.role === 'confirm') {
-						resolve(true)
-					} else {
-						reject()
-					}
-				},
-			})
+			if (result.data.action === 'confirm') {
+				resolve(true)
+				setToastData((prev: any) => ({
+					...prev,
+					isOpen: true,
+					message: 'Successfully deleted product!',
+				}))
+				handleDeleteProduct(id)
+			} else {
+				reject()
+			}
+			setIsOpen(false)
 		})
 	}
 
@@ -77,6 +72,23 @@ const CardComponent: React.FC<CardInter> = ({
 			<IonTitle color='danger' className='ion-margin-top'>
 				{price}$
 			</IonTitle>
+			<IonCardContent className='ion-padding'>
+				<div
+					style={{
+						height: 'auto',
+						margin: '0 auto',
+						maxWidth: 64,
+						width: '100%',
+					}}
+				>
+					<QRCode
+						size={256}
+						style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+						value={id}
+						viewBox={`0 0 56 56`}
+					/>
+				</div>
+			</IonCardContent>
 			<IonNavLink
 				routerDirection='forward'
 				component={() => (
@@ -98,19 +110,31 @@ const CardComponent: React.FC<CardInter> = ({
 				expand='full'
 				color='danger'
 				className='ion-margin-top'
-				onClick={async () => {
-					await canDismiss().then(() => {
-						handleDeleteProduct(id)
-						setToastData((prev: any) => ({
-							...prev,
-							isOpen: true,
-							message: 'Successfully deleted product!',
-						}))
-					})
-				}}
+				onClick={async () => setIsOpen(true)}
 			>
 				Delete
 			</IonButton>
+			<IonActionSheet
+				isOpen={isOpen}
+				header='Are you sure?'
+				buttons={[
+					{
+						text: 'Yes',
+						role: 'confirm',
+						data: {
+							action: 'confirm',
+						},
+					},
+					{
+						text: 'No',
+						role: 'cancel',
+						data: {
+							action: 'cancel',
+						},
+					},
+				]}
+				onWillDismiss={({ detail }) => onResult(detail)}
+			></IonActionSheet>
 		</IonCard>
 	)
 }

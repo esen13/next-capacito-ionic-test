@@ -1,5 +1,6 @@
+// import { BarcodeScanner } from '@capacitor-community/barcode-scanner'
+import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning'
 import { Capacitor } from '@capacitor/core'
-
 import {
 	IonApp,
 	IonButton,
@@ -14,7 +15,14 @@ import {
 	IonToast,
 	IonToolbar,
 } from '@ionic/react'
-import { addCircle, addCircleOutline, menu, menuOutline } from 'ionicons/icons'
+import {
+	addCircle,
+	addCircleOutline,
+	camera,
+	cameraOutline,
+	menu,
+	menuOutline,
+} from 'ionicons/icons'
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -49,6 +57,12 @@ const Main: React.FC = () => {
 	useEffect(() => {
 		createStore()
 		getStore('mockProducts')
+		// BarcodeScanner.installGoogleBarcodeScannerModule().then(res => {
+		// 	console.log('barcode', res)
+		// })
+		// BarcodeScanner.isSupported().then(result => {
+		// 	console.log('[isSupported] result', result)
+		// })
 		// clearStore()
 	}, [])
 
@@ -70,6 +84,32 @@ const Main: React.FC = () => {
 		setData(newData)
 	}
 
+	const scan = async (): Promise<void> => {
+		const status: any = await BarcodeScanner.checkPermissions()
+		console.log('status:', status)
+		if (status !== 'granted') {
+			console.log(
+				'some problem with the camera\n',
+				'If you want to grant permission for using your camera, enable it in the app settings.'
+			)
+			const req = await BarcodeScanner.requestPermissions()
+			console.log('request:', req)
+		} else if (status === 'granted') {
+			console.log('camera permission granted!')
+		}
+		console.log('camera', camera)
+
+		// const { barcodes } = await BarcodeScanner.scan()
+		const result: any = await BarcodeScanner.scan()
+		console.log('scan [result]', result)
+		if (result) {
+			const tempData = [...data]
+			const newData = tempData.filter(t => t.id === result?.id)
+			// TODO: need add redirect to component
+			console.log(newData)
+		}
+	}
+
 	return (
 		<IonApp>
 			<IonHeader translucent>
@@ -78,6 +118,13 @@ const Main: React.FC = () => {
 						{/* <IonBackButton default-href='#'></IonBackButton> */}
 						<IonButton>
 							<IonIcon slot='icon-only' ios={menuOutline} md={menu}></IonIcon>
+						</IonButton>
+						<IonButton onClick={scan}>
+							<IonIcon
+								slot='icon-only'
+								ios={cameraOutline}
+								md={camera}
+							></IonIcon>
 						</IonButton>
 					</IonButtons>
 					<IonTitle className='ion-text-center'>Store Mobile App</IonTitle>
@@ -117,7 +164,15 @@ const Main: React.FC = () => {
 					duration={toastData.duration}
 				></IonToast>
 				{isPlatform && (
-					<IonFab slot='fixed' vertical='bottom' horizontal='end'>
+					<IonFab
+						slot='fixed'
+						vertical='bottom'
+						horizontal='end'
+						style={{
+							marginRight: '1rem',
+							marginBottom: '1rem',
+						}}
+					>
 						<IonFabButton id='open-custom-dialog'>
 							<IonIcon icon={addCircle}></IonIcon>
 						</IonFabButton>
