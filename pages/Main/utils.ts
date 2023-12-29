@@ -14,12 +14,13 @@ const startScan = async () => {
 	const listener = await BarcodeScanner.addListener(
 		'barcodeScanned',
 		async result => {
-			console.log(result.barcode)
+			console.log('[startScan] addListener result.barcode', result)
 		}
 	)
 
 	// Start the barcode scanner
-	await BarcodeScanner.startScan()
+	const result = await BarcodeScanner.startScan()
+	return result
 }
 
 const stopScan = async () => {
@@ -53,7 +54,7 @@ const scanSingleBarcode = async () => {
 	})
 }
 
-const scan = async () => {
+const onScan = async () => {
 	const { barcodes } = await BarcodeScanner.scan({
 		formats: [BarcodeFormat.QrCode],
 	})
@@ -130,4 +131,4 @@ const requestPermissions = async () => {
 	return camera
 }
 
-export { checkPermissions, requestPermissions, scan, startScan, stopScan }
+export { checkPermissions, onScan, requestPermissions, startScan, stopScan }

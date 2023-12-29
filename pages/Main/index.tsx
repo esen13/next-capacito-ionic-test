@@ -1,4 +1,3 @@
-// import { BarcodeScanner } from '@capacitor-community/barcode-scanner'
 import { Capacitor } from '@capacitor/core'
 import {
 	IonApp,
@@ -9,6 +8,7 @@ import {
 	IonFabButton,
 	IonHeader,
 	IonIcon,
+	IonModal,
 	IonText,
 	IonTitle,
 	IonToast,
@@ -28,12 +28,15 @@ import { v4 as uuidv4 } from 'uuid'
 import ModalComponent from '@/components/ModalComponent'
 import HomePage from '../HomePage'
 import { productList } from '../HomePage/fake'
+import ProductPage from '../ProductPage'
 import { createStore, setStore, storage } from './store'
 import { Product } from './types'
-import { requestPermissions, startScan } from './utils'
+import { startScan, stopScan } from './utils'
 
 const Main: React.FC = () => {
 	const [data, setData] = useState<Product[]>(productList)
+	const [isOpenProduct, setIsOpenProduct] = useState<boolean>(false)
+	const [dataProduct, setDataProduct] = useState([])
 	const [toastData, setToastData] = useState({
 		isOpen: false,
 		message: '',
@@ -48,6 +51,7 @@ const Main: React.FC = () => {
 			if (listData) {
 				const parseData = JSON.parse(listData)
 				setData(parseData)
+				return parseData
 			}
 		} catch (error) {
 			console.warn('error', error)
@@ -64,6 +68,7 @@ const Main: React.FC = () => {
 		// 	console.log('[isSupported] result', result)
 		// })
 		// clearStore()
+		// return () => stopScan();
 	}, [])
 
 	const handleCreateProduct = async (newProduct: Omit<Product, 'id'>) => {
@@ -84,18 +89,42 @@ const Main: React.FC = () => {
 		setData(newData)
 	}
 
-	const onStartScan = async (): Promise<void> => {
-		await requestPermissions().then(async (res: string | any) => {
-			if (res?.granted) {
-				await startScan().then((result: string | any) => {
-					console.log('startScan', res)
-					const tempData = [...data]
-					const newData = tempData.filter(t => t.id === result?.id)
-					// TODO: need add redirect to component
-					// IonRedirect = newData[0].id
-				})
+	const onStartScan = async () => {
+		try {
+			if (data) {
+				console.log('data 111', data)
+				const result: any = await startScan()
+				if (result.content) {
+					const parseData = JSON.parse(JSON.stringify(data))
+					console.log('scan result', result.content)
+					console.log('parseData', parseData)
+					const newData = parseData.filter(
+						(t: { id: string }) => t.id === result.content
+					)
+					console.log('newData', newData)
+					if (newData.length > 0) {
+						setDataProduct(newData)
+						setIsOpenProduct(true)
+						setToastData(prev => ({
+							...prev,
+							isOpen: true,
+							message: 'Success scan QR code',
+							color: 'success',
+						}))
+					} else {
+						setToastData(prev => ({
+							...prev,
+							isOpen: true,
+							message: 'Failed to scan QR code',
+							color: 'danger',
+						}))
+					}
+					await stopScan()
+				}
 			}
-		})
+		} catch (error) {
+			console.warn(error)
+		}
 	}
 
 	return (
@@ -107,13 +136,15 @@ const Main: React.FC = () => {
 						<IonButton>
 							<IonIcon slot='icon-only' ios={menuOutline} md={menu}></IonIcon>
 						</IonButton>
-						<IonButton onClick={onStartScan}>
-							<IonIcon
-								slot='icon-only'
-								ios={cameraOutline}
-								md={camera}
-							></IonIcon>
-						</IonButton>
+						{isPlatform && (
+							<IonButton onClick={onStartScan}>
+								<IonIcon
+									slot='icon-only'
+									ios={cameraOutline}
+									md={camera}
+								></IonIcon>
+							</IonButton>
+						)}
 					</IonButtons>
 					<IonTitle className='ion-text-center'>Store Mobile App</IonTitle>
 					{!isPlatform && (
@@ -166,6 +197,13 @@ const Main: React.FC = () => {
 						</IonFabButton>
 					</IonFab>
 				)}
+				<IonModal isOpen={isOpenProduct}>
+					<ProductPage
+						dItem={dataProduct}
+						handleDeleteProduct={handleDeleteProduct}
+						setToastData={setToastData}
+					/>
+				</IonModal>
 			</IonContent>
 		</IonApp>
 	)

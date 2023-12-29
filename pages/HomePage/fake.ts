@@ -1,9 +1,8 @@
-import { v4 as uuidv4 } from 'uuid'
 import { Product } from '../Main/types'
 
 export const productList: Product[] = [
 	{
-		id: uuidv4(),
+		id: '1111', // uuidv4()
 		title: 'MacBook pro m1',
 		img: '',
 		subTitle: 'Lorem ipsum dolor sit amet consectetur',
@@ -12,7 +11,7 @@ export const productList: Product[] = [
 		price: 1999,
 	},
 	{
-		id: uuidv4(),
+		id: '2222',
 		title: 'MacBook pro m2',
 		img: '',
 		subTitle: 'Lorem ipsum dolor sit amet consectetur',
@@ -21,7 +20,7 @@ export const productList: Product[] = [
 		price: 1899,
 	},
 	{
-		id: uuidv4(),
+		id: '3333',
 		title: 'MacBook pro m3',
 		img: '',
 		subTitle: 'Lorem ipsum dolor sit amet consectetur',
@@ -30,7 +29,7 @@ export const productList: Product[] = [
 		price: 1799,
 	},
 	{
-		id: uuidv4(),
+		id: '4444',
 		title: 'MacBook pro m4',
 		img: '',
 		subTitle: 'Lorem ipsum dolor sit amet consectetur',
