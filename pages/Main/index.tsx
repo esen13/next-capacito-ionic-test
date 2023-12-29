@@ -1,5 +1,4 @@
 // import { BarcodeScanner } from '@capacitor-community/barcode-scanner'
-import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning'
 import { Capacitor } from '@capacitor/core'
 import {
 	IonApp,
@@ -31,6 +30,7 @@ import HomePage from '../HomePage'
 import { productList } from '../HomePage/fake'
 import { createStore, setStore, storage } from './store'
 import { Product } from './types'
+import { requestPermissions, startScan } from './utils'
 
 const Main: React.FC = () => {
 	const [data, setData] = useState<Product[]>(productList)
@@ -84,30 +84,18 @@ const Main: React.FC = () => {
 		setData(newData)
 	}
 
-	const scan = async (): Promise<void> => {
-		const status: any = await BarcodeScanner.checkPermissions()
-		console.log('status:', status)
-		if (status !== 'granted') {
-			console.log(
-				'some problem with the camera\n',
-				'If you want to grant permission for using your camera, enable it in the app settings.'
-			)
-			const req = await BarcodeScanner.requestPermissions()
-			console.log('request:', req)
-		} else if (status === 'granted') {
-			console.log('camera permission granted!')
-		}
-		console.log('camera', camera)
-
-		// const { barcodes } = await BarcodeScanner.scan()
-		const result: any = await BarcodeScanner.scan()
-		console.log('scan [result]', result)
-		if (result) {
-			const tempData = [...data]
-			const newData = tempData.filter(t => t.id === result?.id)
-			// TODO: need add redirect to component
-			console.log(newData)
-		}
+	const onStartScan = async (): Promise<void> => {
+		await requestPermissions().then(async (res: string | any) => {
+			if (res?.granted) {
+				await startScan().then((result: string | any) => {
+					console.log('startScan', res)
+					const tempData = [...data]
+					const newData = tempData.filter(t => t.id === result?.id)
+					// TODO: need add redirect to component
+					// IonRedirect = newData[0].id
+				})
+			}
+		})
 	}
 
 	return (
@@ -119,7 +107,7 @@ const Main: React.FC = () => {
 						<IonButton>
 							<IonIcon slot='icon-only' ios={menuOutline} md={menu}></IonIcon>
 						</IonButton>
-						<IonButton onClick={scan}>
+						<IonButton onClick={onStartScan}>
 							<IonIcon
 								slot='icon-only'
 								ios={cameraOutline}
