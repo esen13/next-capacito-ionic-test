@@ -92,25 +92,21 @@ const Main: React.FC = () => {
 	const onStartScan = async () => {
 		try {
 			if (data) {
-				console.log('data 111', data)
 				const result: any = await startScan()
 				if (result.content) {
 					const parseData = JSON.parse(JSON.stringify(data))
-					console.log('scan result', result.content)
-					console.log('parseData', parseData)
 					const newData = parseData.filter(
 						(t: { id: string }) => t.id === result.content
 					)
-					console.log('newData', newData)
 					if (newData.length > 0) {
-						setDataProduct(newData)
-						setIsOpenProduct(true)
 						setToastData(prev => ({
 							...prev,
 							isOpen: true,
 							message: 'Success scan QR code',
 							color: 'success',
 						}))
+						setDataProduct(newData)
+						setIsOpenProduct(true)
 					} else {
 						setToastData(prev => ({
 							...prev,
@@ -199,9 +195,11 @@ const Main: React.FC = () => {
 				)}
 				<IonModal isOpen={isOpenProduct}>
 					<ProductPage
-						dItem={dataProduct}
+						dItem={dataProduct[0]}
 						handleDeleteProduct={handleDeleteProduct}
 						setToastData={setToastData}
+						setIsOpenProduct={setIsOpenProduct}
+						isModal={true}
 					/>
 				</IonModal>
 			</IonContent>

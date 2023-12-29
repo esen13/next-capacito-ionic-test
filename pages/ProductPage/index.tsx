@@ -20,22 +20,64 @@ interface CardInter {
 	dItem: any
 	handleDeleteProduct: (id: string) => void
 	setToastData: any
+	setIsOpenProduct: any
+	isModal: boolean
 }
 
 const ProductPage: React.FC<CardInter> = ({
 	dItem,
 	handleDeleteProduct,
 	setToastData,
+	setIsOpenProduct,
+	isModal,
 }) => {
 	const { title, subTitle, img, description, price, id } = dItem
+
+	if (!dItem) {
+		return (
+			<>
+				<IonHeader>
+					<IonToolbar>
+						{isModal ? (
+							<IonButtons
+								color='medium'
+								slot='start'
+								onClick={() => setIsOpenProduct(false)}
+							>
+								Close
+							</IonButtons>
+						) : (
+							<IonButtons slot='start'>
+								<IonBackButton></IonBackButton>
+							</IonButtons>
+						)}
+						<IonTitle>Not Find</IonTitle>
+					</IonToolbar>
+				</IonHeader>
+				<IonContent class='ion-padding'>
+					<h1>No data</h1>
+				</IonContent>
+			</>
+		)
+	}
 
 	return (
 		<>
 			<IonHeader>
 				<IonToolbar>
-					<IonButtons slot='start'>
-						<IonBackButton></IonBackButton>
-					</IonButtons>
+					{isModal ? (
+						<IonButtons
+							color='medium'
+							slot='start'
+							onClick={() => setIsOpenProduct(false)}
+						>
+							Close
+						</IonButtons>
+					) : (
+						<IonButtons slot='start'>
+							<IonBackButton></IonBackButton>
+						</IonButtons>
+					)}
 					<IonTitle>{title}</IonTitle>
 				</IonToolbar>
 			</IonHeader>
